@@ -1,19 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_bloc.dart';
+import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_state.dart';
 import 'package:flutter_simple_game_collection/screens/home_screen.dart';
+import 'package:flutter_simple_game_collection/screens/splash_screen.dart';
+import 'package:flutter_simple_game_collection/utilities/preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  await Preferences.init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Simple Game Collection',
-      home: HomeScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ThemeBloc(),
+        ),
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeBlocState>(
+        builder: (context, themeState) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: themeState.themeData,
+            title: 'Simple Game Collection',
+            home: const HomeScreen()
+            // SplashScreen()
+            ,
+            routes: <String, WidgetBuilder>{
+              '/splash': (BuildContext context) => const SplashScreen(),
+              '/homeLobby': (BuildContext context) => const HomeScreen(),
+            },
+          );
+        },
+      ),
     );
   }
 }

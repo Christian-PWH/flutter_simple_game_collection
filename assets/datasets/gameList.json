@@ -1,0 +1,13 @@
+{
+    "datas" : 
+    [
+        {
+            "label": "Tic-Tac-Toe",
+            "image_path": "assets/images/game_tic_tac_toe.png"
+        },
+        {
+            "label": "Rock-Paper-Scissor",
+            "image_path": "assets/images/game_rock_paper_scissor.png"
+        }
+    ]
+}
