@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 const kSplashTextStyle = TextStyle(
@@ -6,6 +7,7 @@ const kSplashTextStyle = TextStyle(
   letterSpacing: 0.5,
   fontWeight: FontWeight.bold,
   fontStyle: FontStyle.italic,
+  color: kDarkTextTheme,
   shadows: [
     Shadow(
       blurRadius: 2.5,
@@ -20,6 +22,7 @@ const kAppbarTextStyle = TextStyle(
   letterSpacing: 0.5,
   fontWeight: FontWeight.normal,
   fontStyle: FontStyle.italic,
+  color: kDarkTextTheme,
   shadows: [
     Shadow(
       blurRadius: 2.0,
@@ -27,6 +30,13 @@ const kAppbarTextStyle = TextStyle(
       offset: Offset(2.5, 2.5),
     ),
   ],
+);
+
+const kElevatedButtonTextStyle = TextStyle(
+  fontSize: 15.0,
+  letterSpacing: 0.5,
+  fontFamily: 'PixelEmulator',
+  fontWeight: FontWeight.normal,
 );
 
 const colorizeColors = [
@@ -39,11 +49,32 @@ const colorizeColors = [
 ];
 
 //light theme
-const kLightBgColor = Color(0xFFE9EFDA);
+const kLightBgColor = Color(0xFFBDC2E0);
 const kLightThemeModeColor = Color(0xFF002347);
-const kLightTextTheme = Color(0xFFEAECF5);
+const kLightTextTheme = Color(0xF20D112C);
 
 //dark theme
-const kDarkBgColor = Colors.black;
+const kDarkBgColor = Color(0xFF131416);
 const kDarkThemeModeColor = Color(0xFFE6EAD8);
 const kDarkTextTheme = Color(0xFFF1F3F9);
+
+Future<void> showAlertDialog(
+    {required BuildContext context,
+    required String title,
+    required String content,
+    required String defaultActionText,
+    required final VoidCallback onOkPressed}) async {
+  return await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () => onOkPressed(),
+          child: Text(defaultActionText),
+        ),
+      ],
+    ),
+  );
+}

@@ -3,11 +3,13 @@
     [
         {
             "label": "Tic-Tac-Toe",
-            "image_path": "assets/images/game_tic_tac_toe.png"
+            "image_path": "assets/images/game_tic_tac_toe.png",
+            "rule" : "The object of Tic Tac Toe is to get three in a row. You play on a three by three game board. The first player is known as X and the second is O. Players alternate placing Xs and Os on the game board until either opponent has three in a row or all nine squares are filled. X always goes first, and in the event that no one has three in a row, the stalemate is called a cat game."
         },
         {
             "label": "Rock-Paper-Scissor",
-            "image_path": "assets/images/game_rock_paper_scissor.png"
+            "image_path": "assets/images/game_rock_paper_scissor.png",
+            "rule" : "Rock wins against scissors;\npaper wins against rock;\nand scissors wins against paper.\nIf both players throw the same hand signal, it is considered a tie, and play resumes until there is a clear winner."
         }
     ]
 }

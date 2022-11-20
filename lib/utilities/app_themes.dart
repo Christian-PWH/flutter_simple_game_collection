@@ -14,7 +14,9 @@ class AppThemes {
         blendOnColors: false,
         toggleButtonsRadius: 10.0,
         cardRadius: 25.0,
+        elevatedButtonElevation: 5.0,
       ),
+      useMaterial3: true,
       visualDensity: FlexColorScheme.comfortablePlatformDensity,
       background: Colors.transparent,
       textTheme: FlexThemeData.light().textTheme.apply(
@@ -32,7 +34,9 @@ class AppThemes {
         blendOnColors: false,
         toggleButtonsRadius: 10.0,
         cardRadius: 25.0,
+        elevatedButtonElevation: 5.0,
       ),
+      useMaterial3: true,
       visualDensity: FlexColorScheme.comfortablePlatformDensity,
       background: Colors.transparent,
       textTheme: FlexThemeData.dark().textTheme.apply(

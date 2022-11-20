@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_bloc.dart';
 import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_event.dart';
+import 'package:flutter_simple_game_collection/components/rule_dialog.dart';
+import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe.dart';
 import 'package:flutter_simple_game_collection/utilities/app_themes.dart';
 import 'package:flutter_simple_game_collection/utilities/constanst.dart';
 import 'package:flutter_simple_game_collection/utilities/preferences.dart';
@@ -52,7 +54,26 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         toolbarHeight: 100.0,
         backgroundColor: Theme.of(context).backgroundColor,
+        automaticallyImplyLeading: false,
         actions: [
+          SizedBox(
+            width: 50.0,
+            height: 50.0,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              alignment: Alignment.center,
+              tooltip: "Setting",
+              iconSize: 50.0,
+              icon: Icon(
+                color: Preferences.getTheme() == AppTheme.lightTheme
+                    ? kDarkBgColor
+                    : kLightBgColor,
+                Icons.settings,
+              ),
+              onPressed: () {},
+            ),
+          ),
+          const Spacer(),
           AnimatedIconButton(
             alignment: Alignment.center,
             initialIcon: Preferences.getTheme() == AppTheme.lightTheme ? 1 : 0,
@@ -61,10 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
             splashColor: Colors.transparent,
             icons: const <AnimatedIconItem>[
               AnimatedIconItem(
-                icon: Icon(Icons.light_mode, color: kDarkThemeModeColor),
+                tooltip: 'Light Mode',
+                icon: Icon(Icons.light_mode, color: kLightBgColor),
               ),
               AnimatedIconItem(
-                icon: Icon(Icons.dark_mode, color: kLightThemeModeColor),
+                tooltip: 'Dark Mode',
+                icon: Icon(Icons.dark_mode, color: kDarkBgColor),
               ),
             ],
             onPressed: () {
@@ -76,18 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
-        leading: IconButton(
-          alignment: Alignment.center,
-          tooltip: "Setting",
-          icon: Icon(
-            color: Preferences.getTheme() == AppTheme.lightTheme
-                ? kLightThemeModeColor
-                : kDarkThemeModeColor,
-            Icons.settings,
-            size: 50.0,
-          ),
-          onPressed: () {},
-        ),
       ),
       body: _body(),
     );
@@ -99,11 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
           (item) => SafeArea(
             child: Card(
               color: Theme.of(context).cardColor,
-              elevation: 5.0,
+              elevation: 7.0,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: Theme.of(context).primaryColor,
-                  width: 5.0,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  width: 7.0,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(25.0)),
               ),
@@ -117,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Stack(
                     children: <Widget>[
                       Container(
-                        alignment: Alignment.topCenter,
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                         child: item['image_path'] != null
                             ? Image.asset(
@@ -134,6 +145,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                       ),
+                      Container(
+                        alignment: Alignment.topRight,
+                        padding:
+                            const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                        child: SizedBox(
+                          width: 65.0,
+                          height: 65.0,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              backgroundColor: Theme.of(context)
+                                  .elevatedButtonTheme
+                                  .style
+                                  ?.backgroundColor,
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    width: 2.5,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 50.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              showRuleDialog(
+                                context: context,
+                                title: 'RULE - ${item['label']}',
+                                content: item['rule'],
+                                defaultActionText: 'OK',
+                                onOkPressed: (() => Navigator.pop(context)),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                       Positioned(
                         height: 75.0,
                         bottom: 0.0,
@@ -149,10 +205,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Container(
                             alignment: Alignment.center,
-                            color: Theme.of(context).primaryColor,
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
                             child: Text(
                               item['label'] ?? 'Game Title',
                               style: const TextStyle(
+                                color: Colors.white,
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -211,6 +269,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _selectGame(Map<String, dynamic> item) {
-    print(item);
+    // showRuleDialog(
+    //   context: context,
+    //   title: item['label'],
+    //   content:
+    //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    //   defaultActionText: "OK",
+    //   onOkPressed: () => Navigator.pop(context),
+    // );
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const TicTacToe()));
   }
 }
