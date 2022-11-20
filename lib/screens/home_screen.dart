@@ -57,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         actions: [
           SizedBox(
-            width: 50.0,
-            height: 50.0,
+            width: 100.0,
+            height: 100.0,
             child: IconButton(
               padding: EdgeInsets.zero,
               alignment: Alignment.center,
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           AnimatedIconButton(
             alignment: Alignment.center,
             initialIcon: Preferences.getTheme() == AppTheme.lightTheme ? 1 : 0,
-            size: 50,
+            size: 50.0,
             duration: const Duration(milliseconds: 500),
             splashColor: Colors.transparent,
             icons: const <AnimatedIconItem>[
@@ -209,11 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Theme.of(context).colorScheme.primaryContainer,
                             child: Text(
                               item['label'] ?? 'Game Title',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: kLabelTextStyle(context),
                             ),
                           ),
                         ),
@@ -269,15 +265,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _selectGame(Map<String, dynamic> item) {
-    // showRuleDialog(
-    //   context: context,
-    //   title: item['label'],
-    //   content:
-    //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    //   defaultActionText: "OK",
-    //   onOkPressed: () => Navigator.pop(context),
-    // );
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const TicTacToe()));
+    int selectedGame = listGame.indexOf(item);
+    switch (selectedGame) {
+      case 0:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const TicTacToe()));
+        break;
+      case 1:
+        break;
+      default:
+    }
   }
 }

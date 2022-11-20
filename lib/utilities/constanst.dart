@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 const kSplashTextStyle = TextStyle(
@@ -18,6 +17,30 @@ const kSplashTextStyle = TextStyle(
 
 const kAppbarTextStyle = TextStyle(
   fontSize: 35.0,
+  fontFamily: 'PixelEmulator',
+  letterSpacing: 0.5,
+  fontWeight: FontWeight.normal,
+  fontStyle: FontStyle.italic,
+  color: kDarkTextTheme,
+  shadows: [
+    Shadow(
+      blurRadius: 2.0,
+      color: Colors.black,
+      offset: Offset(2.5, 2.5),
+    ),
+  ],
+);
+
+TextStyle? kLabelTextStyle(BuildContext context) {
+  return TextStyle(
+    color: Theme.of(context).colorScheme.inverseSurface,
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+  );
+}
+
+const kHeaderTextStyle = TextStyle(
+  fontSize: 30.0,
   fontFamily: 'PixelEmulator',
   letterSpacing: 0.5,
   fontWeight: FontWeight.normal,

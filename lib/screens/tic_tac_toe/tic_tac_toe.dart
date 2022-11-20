@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_cpu/tic_tac_toe_cpu_utils.dart';
+import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_widgets/tic_tac_toe_gamemode_selection.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_widgets/tic_tac_toe_presenter.dart';
+import 'package:flutter_simple_game_collection/utilities/app_themes.dart';
 import 'package:flutter_simple_game_collection/utilities/constanst.dart';
+import 'package:flutter_simple_game_collection/utilities/preferences.dart';
 
 class TicTacToe extends StatefulWidget {
   const TicTacToe({super.key});
@@ -52,8 +55,19 @@ class _TicTacToeState extends State<TicTacToe> {
   @override
   void initState() {
     super.initState();
-    singlePlayer = true;
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      gameModeSelect();
+    });
+  }
+
+  void gameModeSelect() {
+    tictactoeGameModeSelectionDialog(context: context).then(
+      (value) {
+        setState(() {
+          singlePlayer = value;
+        });
+      },
+    );
   }
 
   @override
@@ -62,7 +76,7 @@ class _TicTacToeState extends State<TicTacToe> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        toolbarHeight: 100.0,
+        toolbarHeight: 75.0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: const Text(
           'Tic Tac Toe',
@@ -73,7 +87,7 @@ class _TicTacToeState extends State<TicTacToe> {
         children: [
           _buildPointsTable(),
           _buildGrid(),
-          _buildTurn(),
+          _buildBottom(),
         ],
       ),
     );
@@ -92,21 +106,15 @@ class _TicTacToeState extends State<TicTacToe> {
                   Expanded(
                     child: Text(
                       singlePlayer ? 'YOU ( X )' : 'Player1 ( X )',
-                      style: const TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800),
+                      style: kLabelTextStyle(context),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 20.0,
                   ),
                   Text(
                     scorePlayer.toString(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold),
+                    style: kLabelTextStyle(context),
                   ),
                 ],
               ),
@@ -120,21 +128,15 @@ class _TicTacToeState extends State<TicTacToe> {
                   Expanded(
                     child: Text(
                       singlePlayer ? 'CPU ( O )' : 'Player2 ( O )',
-                      style: const TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800),
+                      style: kLabelTextStyle(context),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 20.0,
                   ),
                   Text(
                     scoreAi.toString(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold),
+                    style: kLabelTextStyle(context),
                   )
                 ],
               ),
@@ -145,24 +147,18 @@ class _TicTacToeState extends State<TicTacToe> {
               padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Draw',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800),
+                      style: kLabelTextStyle(context),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 20.0,
                   ),
                   Text(
                     scoreDraw.toString(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold),
+                    style: kLabelTextStyle(context),
                   )
                 ],
               ),
@@ -179,55 +175,116 @@ class _TicTacToeState extends State<TicTacToe> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
         child: GridView.builder(
-            itemCount: 9,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              String gameSymbols = '';
-              if (singlePlayer) {
-                if (idItemListXOSinglePlayer[index] == 1) gameSymbols = 'X';
-                if (idItemListXOSinglePlayer[index] == -1) gameSymbols = 'O';
-              } else {
-                if (itemListXOMultiPlayer[index] == 'X') gameSymbols = 'X';
-                if (itemListXOMultiPlayer[index] == 'O') gameSymbols = 'O';
-              }
+          itemCount: 9,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            String gameSymbols = '';
+            if (singlePlayer) {
+              if (idItemListXOSinglePlayer[index] == 1) gameSymbols = 'X';
+              if (idItemListXOSinglePlayer[index] == -1) gameSymbols = 'O';
+            } else {
+              if (itemListXOMultiPlayer[index] == 'X') gameSymbols = 'X';
+              if (itemListXOMultiPlayer[index] == 'O') gameSymbols = 'O';
+            }
 
-              return GestureDetector(
-                onTap: () {
-                  singlePlayer == true
-                      ? idItemListXOSinglePlayer[index] != 0
-                          ? null
-                          : _movePlayedSingle(index)
-                      : _tappedFuncMultiPlayer(index);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Theme.of(context).toggleableActiveColor)),
-                  child: Center(
-                    child: Text(
-                      gameSymbols,
-                      style: TextStyle(
-                        color: gameSymbols == 'X' ? Colors.blue : Colors.red,
-                        fontSize: 75.0,
-                      ),
+            return GestureDetector(
+              onTap: () {
+                singlePlayer == true
+                    ? idItemListXOSinglePlayer[index] != 0
+                        ? null
+                        : _movePlayedSingle(index)
+                    : _tappedFuncMultiPlayer(index);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).toggleableActiveColor)),
+                child: Center(
+                  child: Text(
+                    gameSymbols,
+                    style: TextStyle(
+                      color: gameSymbols == 'X' ? Colors.blue : Colors.red,
+                      fontSize: 75.0,
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildTurn() {
+  Widget _buildBottom() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: Text(
-          turnOfx ? 'Turn of X' : 'Turn of O',
-          style: const TextStyle(color: Colors.white),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: 75.0,
+                  height: 75.0,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      backgroundColor: Theme.of(context)
+                          .elevatedButtonTheme
+                          .style
+                          ?.backgroundColor,
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 2.5,
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).colorScheme.error,
+                        size: 50.0,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 100.0,
+                  height: 100.0,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.center,
+                    tooltip: "Setting",
+                    iconSize: 75.0,
+                    icon: Icon(
+                      color: Preferences.getTheme() == AppTheme.lightTheme
+                          ? kDarkBgColor
+                          : kLightBgColor,
+                      Icons.settings,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              turnOfx ? 'Turn of X' : 'Turn of O',
+              style: kLabelTextStyle(context),
+            ),
+          ],
         ),
       ),
     );
@@ -237,10 +294,10 @@ class _TicTacToeState extends State<TicTacToe> {
     if (singlePlayer == false) {
       setState(() {
         if (turnOfx && itemListXOMultiPlayer[index] == '') {
-          itemListXOMultiPlayer[index] = 'O';
+          itemListXOMultiPlayer[index] = 'X';
           filledBoxesMultiPlayer += 1;
         } else if (!turnOfx && itemListXOMultiPlayer[index] == '') {
-          itemListXOMultiPlayer[index] = 'X';
+          itemListXOMultiPlayer[index] = 'O';
           filledBoxesMultiPlayer += 1;
         }
 
@@ -347,6 +404,7 @@ class _TicTacToeState extends State<TicTacToe> {
       for (int i = 0; i < 9; i++) {
         itemListXOMultiPlayer[i] = '';
       }
+      turnOfx = true;
     });
 
     filledBoxesMultiPlayer = 0;
@@ -355,6 +413,7 @@ class _TicTacToeState extends State<TicTacToe> {
   void reinitialize() {
     currentPlayer = TicTacToeUtils.human;
     idItemListXOSinglePlayer = List.generate(9, (idx) => 0);
+    turnOfx = true;
   }
 
   String? getSymbolForIdx(int idx) {

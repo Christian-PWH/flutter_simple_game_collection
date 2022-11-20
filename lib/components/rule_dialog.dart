@@ -13,7 +13,7 @@ Future<void> showRuleDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       icon: const Icon(
         Icons.info_outline,
-        size: 50.0,
+        size: 75.0,
       ),
       title: Text(title),
       content: SizedBox(
