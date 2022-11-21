@@ -10,7 +10,7 @@ Future<void> showAlertDialog(
   return await showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       title: Text(title),
       content: SizedBox(
         height: 300.0,

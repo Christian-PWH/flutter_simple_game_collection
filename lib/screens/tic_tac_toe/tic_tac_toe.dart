@@ -1,4 +1,7 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_game_collection/components/settings_dialog.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_cpu/tic_tac_toe_cpu_utils.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_widgets/tic_tac_toe_gamemode_selection.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe_widgets/tic_tac_toe_presenter.dart';
@@ -78,23 +81,34 @@ class _TicTacToeState extends State<TicTacToe> {
         centerTitle: true,
         toolbarHeight: 75.0,
         backgroundColor: Theme.of(context).backgroundColor,
+        scrolledUnderElevation: 0.0,
+        elevation: 0.0,
         title: const Text(
           'Tic Tac Toe',
           style: kAppbarTextStyle,
+          textAlign: TextAlign.center,
         ),
       ),
-      body: Column(
-        children: [
-          _buildPointsTable(),
-          _buildGrid(),
-          _buildBottom(),
-        ],
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _scoreDisplay(),
+              _gridTable(),
+              _buildBottom(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildPointsTable() {
-    return Expanded(
+  Widget _scoreDisplay() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 5,
+      width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -169,122 +183,135 @@ class _TicTacToeState extends State<TicTacToe> {
     );
   }
 
-  Widget _buildGrid() {
-    return Expanded(
-      flex: 3,
+  Widget _gridTable() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-        child: GridView.builder(
-          itemCount: 9,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            String gameSymbols = '';
-            if (singlePlayer) {
-              if (idItemListXOSinglePlayer[index] == 1) gameSymbols = 'X';
-              if (idItemListXOSinglePlayer[index] == -1) gameSymbols = 'O';
-            } else {
-              if (itemListXOMultiPlayer[index] == 'X') gameSymbols = 'X';
-              if (itemListXOMultiPlayer[index] == 'O') gameSymbols = 'O';
-            }
+        child: Center(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 9,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              String gameSymbols = '';
+              if (singlePlayer) {
+                if (idItemListXOSinglePlayer[index] == 1) gameSymbols = 'X';
+                if (idItemListXOSinglePlayer[index] == -1) gameSymbols = 'O';
+              } else {
+                if (itemListXOMultiPlayer[index] == 'X') gameSymbols = 'X';
+                if (itemListXOMultiPlayer[index] == 'O') gameSymbols = 'O';
+              }
 
-            return GestureDetector(
-              onTap: () {
-                singlePlayer == true
-                    ? idItemListXOSinglePlayer[index] != 0
-                        ? null
-                        : _movePlayedSingle(index)
-                    : _tappedFuncMultiPlayer(index);
-              },
-              child: Container(
-                decoration: BoxDecoration(
+              return GestureDetector(
+                onTap: () {
+                  singlePlayer == true
+                      ? idItemListXOSinglePlayer[index] != 0
+                          ? null
+                          : _movePlayedSingle(index)
+                      : _tappedFuncMultiPlayer(index);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
                     border: Border.all(
-                        color: Theme.of(context).toggleableActiveColor)),
-                child: Center(
-                  child: Text(
-                    gameSymbols,
-                    style: TextStyle(
-                      color: gameSymbols == 'X' ? Colors.blue : Colors.red,
-                      fontSize: 75.0,
+                        color: Theme.of(context).toggleableActiveColor),
+                  ),
+                  child: Center(
+                    child: Text(
+                      gameSymbols,
+                      style: TextStyle(
+                        color: gameSymbols == 'X' ? Colors.blue : Colors.red,
+                        fontSize: 75.0,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
   Widget _buildBottom() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: 75.0,
-                  height: 75.0,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      backgroundColor: Theme.of(context)
-                          .elevatedButtonTheme
-                          .style
-                          ?.backgroundColor,
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 2.5,
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
+    return Container(
+      height: MediaQuery.of(context).size.height / 4.75,
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: 75.0,
+                    height: 75.0,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        backgroundColor: Theme.of(context)
+                            .elevatedButtonTheme
+                            .style
+                            ?.backgroundColor,
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 2.5,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                            ),
+                            borderRadius: BorderRadius.circular(50.0),
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.error,
-                        size: 50.0,
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Theme.of(context).colorScheme.error,
+                          size: 50.0,
+                        ),
                       ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
                   ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.center,
-                    tooltip: "Setting",
-                    iconSize: 75.0,
-                    icon: Icon(
-                      color: Preferences.getTheme() == AppTheme.lightTheme
-                          ? kDarkBgColor
-                          : kLightBgColor,
-                      Icons.settings,
+                  const Spacer(),
+                  SizedBox(
+                    width: 100.0,
+                    height: 100.0,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      tooltip: "Setting",
+                      iconSize: 75.0,
+                      icon: Icon(
+                        color: Preferences.getTheme() == AppTheme.lightTheme
+                            ? kDarkBgColor
+                            : kLightBgColor,
+                        Icons.settings,
+                      ),
+                      onPressed: () {
+                        settingsDialog(context: context);
+                      },
                     ),
-                    onPressed: () {},
                   ),
-                ),
-              ],
-            ),
-            Text(
-              turnOfx ? 'Turn of X' : 'Turn of O',
-              style: kLabelTextStyle(context),
-            ),
-          ],
+                ],
+              ),
+              Text(
+                turnOfx ? 'Turn of X' : 'Turn of O',
+                style: kLabelTextStyle(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
