@@ -285,6 +285,9 @@ class RockPaperScissorState extends State<RockPaperScissor> {
       ).then(
         (value) {
           if (value) {
+            setState(() {
+              gameRound += 1;
+            });
             reinitialize();
           }
         },
