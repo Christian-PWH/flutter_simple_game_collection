@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_bloc.dart';
 import 'package:flutter_simple_game_collection/bloc/theme_bloc/bloc/theme_bloc_state.dart';
 import 'package:flutter_simple_game_collection/screens/home_screen.dart';
+import 'package:flutter_simple_game_collection/screens/rock_paper_scissor/rock_paper_scissor.dart';
 import 'package:flutter_simple_game_collection/screens/splash_screen.dart';
 import 'package:flutter_simple_game_collection/screens/tic_tac_toe/tic_tac_toe.dart';
 import 'package:flutter_simple_game_collection/utilities/preferences.dart';
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
               '/splash': (BuildContext context) => const SplashScreen(),
               '/homeLobby': (BuildContext context) => const HomeScreen(),
               '/homeTicTacToe': (BuildContext context) => const TicTacToe(),
+              '/homeRockPaperScissor': (BuildContext context) =>
+                  const RockPaperScissor(),
             },
           );
         },
