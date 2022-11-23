@@ -89,6 +89,7 @@ Project Link: [https://github.com/Christian-PWH/flutter_simple_game_collection](
 * [Img Shields](https://shields.io)
 * [GitHub Pages](https://pages.github.com)
 * [Stack Overflow](https://stackoverflow.com)
+* [README TEMPLATE by othneildrew](https://github.com/othneildrew/Best-README-Template)
 
 * APP LOGO :
 
