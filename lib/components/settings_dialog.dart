@@ -6,7 +6,7 @@ import 'package:flutter_simple_game_collection/utilities/app_themes.dart';
 import 'package:flutter_simple_game_collection/utilities/constanst.dart';
 import 'package:flutter_simple_game_collection/utilities/preferences.dart';
 
-Future<bool> settingsDialog({
+Future<void> settingsDialog({
   required BuildContext context,
 }) async {
   return await showDialog(
@@ -61,21 +61,25 @@ class SettingsDialogView extends StatelessWidget {
                   children: [
                     const Center(
                       child: Icon(
-                        Icons.dark_mode,
-                        color: kDarkBgColor,
+                        Icons.light_mode,
+                        color: Colors.white,
                         size: 50.0,
                       ),
                     ),
                     Switch(
-                      value: Preferences.getTheme() == AppTheme.lightTheme,
+                      value: Preferences.getTheme() == AppTheme.darkTheme,
                       onChanged: (val) async {
-                        _setTheme(context, val);
+                        if (Preferences.getTheme() == AppTheme.lightTheme) {
+                          _setTheme(context, false);
+                        } else {
+                          _setTheme(context, true);
+                        }
                       },
                     ),
                     const Center(
                       child: Icon(
-                        Icons.light_mode,
-                        color: Colors.white,
+                        Icons.dark_mode,
+                        color: kDarkBgColor,
                         size: 50.0,
                       ),
                     ),

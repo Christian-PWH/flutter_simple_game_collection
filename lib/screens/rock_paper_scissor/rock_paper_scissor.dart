@@ -56,6 +56,13 @@ class RockPaperScissorState extends State<RockPaperScissor> {
     startTimer();
   }
 
+  @override
+  void dispose() {
+    cpuItemController.stopAutoPlay();
+    stopTimer();
+    super.dispose();
+  }
+
   void reinitialize() {
     resetTimer();
     setState(() {
@@ -78,7 +85,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
   }
 
   void stopTimer() {
-    setState(() => countdownTimer!.cancel());
+    countdownTimer!.cancel();
   }
 
   void resetTimer() {
@@ -144,7 +151,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
               CarouselSlider(
                 carouselController: cpuItemController,
                 options: CarouselOptions(
-                  height: 250.0,
+                  height: 200.0,
                   aspectRatio: 16 / 9,
                   autoPlay: cpuHasChoice ? false : true,
                   autoPlayAnimationDuration: const Duration(milliseconds: 500),
@@ -154,7 +161,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
                   enlargeStrategy: CenterPageEnlargeStrategy.height,
                   scrollDirection: Axis.horizontal,
                   autoPlayCurve: Curves.fastOutSlowIn,
-                  viewportFraction: 0.5,
+                  viewportFraction: 0.4,
                   initialPage: 0,
                   scrollPhysics: const NeverScrollableScrollPhysics(),
                 ),
@@ -163,7 +170,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
               Visibility(
                 visible: cpuHasChoice,
                 child: Container(
-                  height: 250.0,
+                  height: 200.0,
                   width: MediaQuery.of(context).size.width,
                   color: Theme.of(context)
                       .colorScheme
@@ -206,8 +213,14 @@ class RockPaperScissorState extends State<RockPaperScissor> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                  child: rockPaperScissorScoreCard(
-                      context, playerWin, cpuWin, true)),
+                  child: Column(
+                children: [
+                  rockPaperScissorStatusCard(
+                      context, playerWin, cpuWin, gameRound, draw, 0),
+                  rockPaperScissorStatusCard(
+                      context, playerWin, cpuWin, gameRound, draw, 1),
+                ],
+              )),
               SizedBox(
                 width: 75.0,
                 height: 75.0,
@@ -230,8 +243,14 @@ class RockPaperScissorState extends State<RockPaperScissor> {
                 ),
               ),
               Expanded(
-                  child: rockPaperScissorScoreCard(
-                      context, playerWin, cpuWin, false)),
+                  child: Column(
+                children: [
+                  rockPaperScissorStatusCard(
+                      context, playerWin, cpuWin, gameRound, draw, 2),
+                  rockPaperScissorStatusCard(
+                      context, playerWin, cpuWin, gameRound, draw, 3),
+                ],
+              )),
             ],
           ),
         ),
@@ -240,7 +259,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
         ),
         CarouselSlider(
           options: CarouselOptions(
-            height: 250.0,
+            height: 200.0,
             aspectRatio: 16 / 9,
             autoPlay: false,
             enableInfiniteScroll: false,
@@ -248,7 +267,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
             enlargeStrategy: CenterPageEnlargeStrategy.height,
             scrollDirection: Axis.horizontal,
             autoPlayCurve: Curves.fastOutSlowIn,
-            viewportFraction: 0.5,
+            viewportFraction: 0.4,
             initialPage: 1,
           ),
           items: rockPaperScissorItemSlider(false),
@@ -332,7 +351,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
                                   child: Center(
                                     child: Icon(
                                       Icons.question_mark,
-                                      size: 150.0,
+                                      size: 100.0,
                                     ),
                                   ),
                                 )
@@ -350,7 +369,7 @@ class RockPaperScissorState extends State<RockPaperScissor> {
                                       child: Center(
                                         child: Icon(
                                           Icons.question_mark,
-                                          size: 150.0,
+                                          size: 100.0,
                                         ),
                                       ),
                                     ),

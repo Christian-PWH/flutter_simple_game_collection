@@ -86,14 +86,30 @@ class _HomeScreenState extends State<HomeScreen> {
             size: 50.0,
             duration: const Duration(milliseconds: 500),
             splashColor: Colors.transparent,
-            icons: const <AnimatedIconItem>[
+            icons: <AnimatedIconItem>[
               AnimatedIconItem(
                 tooltip: 'Light Mode',
-                icon: Icon(Icons.light_mode, color: kLightBgColor),
+                icon: Preferences.getTheme() == AppTheme.darkTheme
+                    ? Icon(Icons.light_mode,
+                        color: Preferences.getTheme() == AppTheme.darkTheme
+                            ? kLightBgColor
+                            : kDarkBgColor)
+                    : Icon(Icons.dark_mode,
+                        color: Preferences.getTheme() == AppTheme.lightTheme
+                            ? kDarkBgColor
+                            : kLightBgColor),
               ),
               AnimatedIconItem(
                 tooltip: 'Dark Mode',
-                icon: Icon(Icons.dark_mode, color: kDarkBgColor),
+                icon: Preferences.getTheme() == AppTheme.lightTheme
+                    ? Icon(Icons.dark_mode,
+                        color: Preferences.getTheme() == AppTheme.lightTheme
+                            ? kDarkBgColor
+                            : kLightBgColor)
+                    : Icon(Icons.light_mode,
+                        color: Preferences.getTheme() == AppTheme.darkTheme
+                            ? kLightBgColor
+                            : kDarkBgColor),
               ),
             ],
             onPressed: () {

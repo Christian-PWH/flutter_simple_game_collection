@@ -10,62 +10,36 @@ Widget rockPaperScissorBottomView(
   int draw,
 ) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       SizedBox(
-        width: 125.0,
+        width: 75.0,
         height: 75.0,
-        child: Card(
-          color: Theme.of(context).cardColor,
-          elevation: 7.0,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              width: 5.0,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(EdgeInsets.zero),
+            backgroundColor:
+                Theme.of(context).elevatedButtonTheme.style?.backgroundColor,
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 2.5,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(25.0)),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'DRAW',
-                style: kLabelTextStyle(context),
-              ),
-              Text(
-                '$draw',
-                style: kLabelTextStyle(context),
-              ),
-            ],
-          ),
-        ),
-      ),
-      SizedBox(
-        width: 125.0,
-        height: 75.0,
-        child: Card(
-          color: Theme.of(context).cardColor,
-          elevation: 7.0,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              width: 5.0,
+          child: Center(
+            child: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.error,
+              size: 50.0,
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(25.0)),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'ROUND',
-                style: kLabelTextStyle(context),
-              ),
-              Text(
-                '$gameRound',
-                style: kLabelTextStyle(context),
-              ),
-            ],
-          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       SizedBox(

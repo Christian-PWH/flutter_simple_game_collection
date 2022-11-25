@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_game_collection/utilities/constanst.dart';
 
-Widget rockPaperScissorScoreCard(
-    BuildContext context, int playerWin, int cpuWin, bool isCpuScoreCard) {
+Widget rockPaperScissorStatusCard(BuildContext context, int playerWin,
+    int cpuWin, int gameRound, int draw, int viewId) {
+  String? statusLabel = '';
+  String? statusContent = '';
+
+  if (viewId == 0) {
+    statusLabel = 'ROUND';
+    statusContent = '$gameRound';
+  } else if (viewId == 1) {
+    statusLabel = 'DRAW';
+    statusContent = '$draw';
+  } else if (viewId == 2) {
+    statusLabel = 'YOU';
+    statusContent = 'win : $playerWin';
+  } else if (viewId == 3) {
+    statusLabel = 'CPU';
+    statusContent = 'win : $cpuWin';
+  }
   return SizedBox(
-    width: 100.0,
+    width: 125.0,
     height: 75.0,
     child: Card(
       color: Theme.of(context).cardColor,
@@ -20,11 +36,11 @@ Widget rockPaperScissorScoreCard(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            isCpuScoreCard ? 'CPU' : 'YOU',
+            statusLabel,
             style: kLabelTextStyle(context),
           ),
           Text(
-            isCpuScoreCard ? 'Win : $cpuWin' : 'Win : $playerWin',
+            statusContent,
             style: kLabelTextStyle(context),
           ),
         ],
